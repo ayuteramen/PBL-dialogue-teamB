@@ -91,20 +91,20 @@ while True:
                 tweet2 = id2status[rid].full_text.replace("\n", " ")
                 tweet2 = re.sub(r"@[0-9a-zA-Z_]{1,15} +", "", tweet2)
 
-                tweet_pair = "<" + tag_gender + ">" + tweet1+ "\t" + tweet2 + "\n"
+                tweet_pair = "<" + tag_gender + ">" + "\t" + tweet1 + "\t" + tweet2 + "\n"
                 print(tweet_pair)
                 f.write(tweet_pair)
     f.close()
     print("Write " + str(len(id2replyid)) + " pairs.")
 
-"""# **分析**"""
+# """# **分析**"""
 
-pattern = re.compile("(男|女)")
-for _, s in id2status.items():
-    if s.in_reply_to_status_id in id2status:
-        user = api.get_user(screen_name=s.author.screen_name)
-        if re.search(pattern, user.description):
-            label = ''.join(re.findall(pattern, user.description))
-            if label != "男女":
-                tweet = s.full_text + '<' + label + '>'
-                print(tweet)
+# pattern = re.compile("(男|女)")
+# for _, s in id2status.items():
+#     if s.in_reply_to_status_id in id2status:
+#         user = api.get_user(screen_name=s.author.screen_name)
+#         if re.search(pattern, user.description):
+#             label = ''.join(re.findall(pattern, user.description))
+#             if label != "男女":
+#                 tweet = s.full_text + '<' + label + '>'
+#                 print(tweet)
