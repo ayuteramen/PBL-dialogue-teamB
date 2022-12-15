@@ -8,7 +8,7 @@ f2 = open(sys.argv[1].replace(".txt", "_removed.txt"), 'w', encoding='utf-8')
 text = f.read()
 
 # 絵文字を除去する　除去したくない文字を指定する。
-text = re.sub(r'[^\w\s？！、。‼️…・()（）「」!?.,/～｢｣＼^｡／･＾‥@]', '', text)
+text = re.sub(r'[^\w\s？！、。‼️…・()「」!?.,/～｢｣＼^｡／･＾‥@]', '', text)
 
 #　宛名を除去する
 pattern = r"@\S+"
