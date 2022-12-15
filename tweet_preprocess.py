@@ -14,12 +14,12 @@ text = re.sub(r'[^\w\s？！、。‼️…・()「」!?.,/～｢｣＼^｡／�
 pattern = r"@\S+"
 text = re.sub(pattern, "", text)
 
-# 変更された文字列をファイルに書き込む
-f2.write(text)
-
 text = text.encode('cp932',errors='ignore').decode('cp932') # 特殊記号を除去
 text = re.sub(r'http\S+', '', text) # URLを除去
 text = re.sub(r'\([^あ-ん\u30A1-\u30F4\u2E80-\u2FDF\u3005-\u3007\u3400-\u4DBF\u4E00-\u9FFF\uF900-\uFAFF\U00020000-\U0002EBEF]+?\)', '', text) # 顔文字を除去
+
+# 変更された文字列をファイルに書き込む
+f2.write(text)
 
 # ファイルを閉じる
 f.close()
