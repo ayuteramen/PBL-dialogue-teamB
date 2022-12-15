@@ -15,6 +15,8 @@ def bleu(fname_ref, fname_pred):
     score = bleu_score(preds, refs)
     print("BLEU = %.2f" % (score*100))
 
+"""
 ref_file = ".txt" # 正解文
 pred_file = ".txt" # 入力文
 bleu(ref_file, pred_file)
+"""
