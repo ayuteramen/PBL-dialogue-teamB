@@ -6,8 +6,8 @@ import generative_system
 app = Flask(__name__)
 ask = Ask(app, '/')
 
-tag_gender = ''
-tag_age = ''
+tag_gender = 'None'
+tag_age = 'None'
 
 # 対話システムを起動
 #system = echo_system.EchoSystem()
@@ -56,7 +56,7 @@ def talk(any_text_a, any_text_b, any_text_c):
     text = tag + text
 ##  デバッグ用
     print("text = ", text)
-    
+
 #   ユーザ発話を対話システムの応答生成に与える，セッションIDもsession.sessionIdで取得する
 
     mes = system.reply({"utt":text,"sessionId":session.sessionId})
