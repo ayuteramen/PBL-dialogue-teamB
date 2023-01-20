@@ -74,10 +74,11 @@ def tag(gender, age, reset):
     print("reset = ", reset)
 
 # questionでセットしたタグを知らせる
-    if tag_age != tag_gender: response = "タグを'" + str(tag_gender) + str(tag_age) + "'にセットしました。"         # タグが片方だけあるとき
-    else: response = "タグを'" + tag_gender + "', '" + tag_age + "'にセットしました。"                              # タグが両方あるとき
-    if reset != 'リセット': return question(response)                                                              # タグをセットしたとき
-    else: return question("タグをリセットしました。")                                                                # タグをリセットしたとき    
+    if tag_age != 'None': response = "タグを'" + str(tag_gender) + str(tag_age) + "'にセットしました。"         # タグが年代だけあるとき
+    elif tag_gender != 'None': response = "タグを'" + tag_gender + "'にセットしました。"                        # タグが性別だけあるとき
+    else: response = "タグを'" + tag_gender + "', '" + tag_age + "'にセットしました。"                          # タグが両方あるとき
+    if reset != 'リセット': return question(response)                                                          # タグをセットしたとき
+    else: return question("タグをリセットしました。")                                                           # タグをリセットしたとき    
 
 if __name__ == '__main__':
 #   port8080でflaskのサーバを起動
