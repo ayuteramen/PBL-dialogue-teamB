@@ -55,11 +55,11 @@ def talk(any_text_a, any_text_b, any_text_c):
     print("tag_gender = ", tag_gender)
     tag = ''
     if tag_age is not None:
-        if tag_gender == '10代':
+        if tag_age == '10代':
             tag = '<10代>'
-        elif tag_gender == '20代':
+        elif tag_age == '20代':
             tag = '<20～30代>'
-        elif tag_gender == '40代':
+        elif tag_age == '40代':
             tag = '<40～60代>'
 
     if tag_gender is not None: tag = '<' + str(tag_gender) + '>' + tag
