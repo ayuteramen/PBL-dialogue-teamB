@@ -62,7 +62,7 @@ def talk(any_text_a, any_text_b, any_text_c):
         elif tag_age == '40代':
             tag = '<40～60代>'
 
-    if tag_gender is not None: tag = '<' + str(tag_gender) + '>' + tag
+    if tag_gender is not None: tag = tag + '<' + str(tag_gender) + '>' 
     tag = tag.replace(' ', '') #空白を削除
     text = tag + text
 ##  デバッグ用
