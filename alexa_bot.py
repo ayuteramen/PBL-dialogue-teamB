@@ -75,8 +75,8 @@ def tag(gender, age, reset):
     global tag_gender
     tag_gender = gender
     if reset == 'リセット':
-        tag_age = ''
-        tag_gender = ''
+        tag_age = 'None'
+        tag_gender = 'None'
     
 ##デバッグ用
     print("tag_age = ", tag_age)
