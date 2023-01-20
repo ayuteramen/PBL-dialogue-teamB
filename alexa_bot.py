@@ -82,9 +82,9 @@ def talk(any_text_a, any_text_b, any_text_c):
 def tag(gender, age, reset):
 #   タグをセットする
     global tag_age 
-    tag_age = age.replace(' ', '')
+    if tag_age is not None:tag_age = age.replace(' ', '')
     global tag_gender
-    tag_gender = gender.replace(' ', '')
+    if tag_age is not None:tag_gender = gender.replace(' ', '')
     if reset == 'リセット':
         tag_age = None
         tag_gender = None
