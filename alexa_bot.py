@@ -51,8 +51,16 @@ def talk(any_text_a, any_text_b, any_text_c):
 #   タグを付ける
     global tag_age, tag_gender
     tag = ''
-    if tag_gender is not None: tag = '<' + str(tag_gender) + '>'
+    if tag_gender is not None:
+        if tag_gender == '10代':
+            tag = '<10代>'
+        elif tag_gender == '20代':
+            tag = '<20～30代>'
+        elif tag_gender == '40代':
+            tag = '<40～60代>'
+
     if tag_age is not None: tag = '<' + str(tag_age) + '>' + tag
+    #tag = tag.replace(' ', '') #空白を削除
     text = tag + text
 ##  デバッグ用
     print("text = ", text)
