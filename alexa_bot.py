@@ -8,7 +8,6 @@ ask = Ask(app, '/')
 
 tag_gender = ''
 tag_age = ''
-tag_reset = ''
 
 # 対話システムを起動
 #system = echo_system.EchoSystem()
@@ -72,7 +71,7 @@ def tag(gender, age, reset):
 ##デバッグ用
     print("tag_age = ", tag_age)
     print("tag_gender = ", tag_gender)
-    print("tag_reset = ", tag_reset)
+    print("reset = ", reset)
 
 # questionでセットしたタグを知らせる
     if reset != 'リセット': return question("タグを'" + tag_gender + "', '" + tag_age + "'にセットしました。")
