@@ -50,6 +50,9 @@ def talk(any_text_a, any_text_b, any_text_c):
 
 #   タグを付ける
     global tag_age, tag_gender
+##  デバッグ用
+    print("tag_age = ", tag_age)
+    print("tag_gender = ", tag_gender)
     tag = ''
     if tag_gender is not None:
         if tag_gender == '10代':
