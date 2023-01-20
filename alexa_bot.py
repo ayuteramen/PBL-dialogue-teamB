@@ -54,7 +54,7 @@ def talk(any_text_a, any_text_b, any_text_c):
     print("tag_age = ", tag_age)
     print("tag_gender = ", tag_gender)
     tag = ''
-    if tag_gender is not None:
+    if tag_age is not None:
         if tag_gender == '10代':
             tag = '<10代>'
         elif tag_gender == '20代':
@@ -62,7 +62,7 @@ def talk(any_text_a, any_text_b, any_text_c):
         elif tag_gender == '40代':
             tag = '<40～60代>'
 
-    if tag_age is not None: tag = '<' + str(tag_age) + '>' + tag
+    if tag_gender is not None: tag = '<' + str(tag_gender) + '>' + tag
     tag = tag.replace(' ', '') #空白を削除
     text = tag + text
 ##  デバッグ用
