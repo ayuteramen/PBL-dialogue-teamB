@@ -47,6 +47,16 @@ def talk(any_text_a, any_text_b, any_text_c):
 
 ##   デバッグ用
     print("text = ", text)
+
+#   タグを付ける
+    global tag_age, tag_gender
+    tag = ''
+    if tag_gender != 'None': tag = '<' + str(tag_gender) + '>'
+    if tag_age != 'None': tag = '<' + str(tag_age) + '>' + tag
+    text = tag + text
+##  デバッグ用
+    print("text = ", text)
+    
 #   ユーザ発話を対話システムの応答生成に与える，セッションIDもsession.sessionIdで取得する
 
     mes = system.reply({"utt":text,"sessionId":session.sessionId})
