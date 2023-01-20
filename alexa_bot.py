@@ -75,8 +75,8 @@ def tag(gender, age, reset):
     global tag_gender
     tag_gender = gender
     if reset == 'リセット':
-        tag_age = 'None'
-        tag_gender = 'None'
+        tag_age = ''
+        tag_gender = ''
     
 ##デバッグ用
     print("tag_age = ", tag_age)
@@ -84,9 +84,9 @@ def tag(gender, age, reset):
     print("reset = ", reset)
 
 # questionでセットしたタグを知らせる
-    if tag_age != 'None': response = "タグを'" + str(tag_gender) + str(tag_age) + "'にセットしました。"         # タグが年代だけあるとき
-    elif tag_gender != 'None': response = "タグを'" + tag_gender + "'にセットしました。"                        # タグが性別だけあるとき
-    else: response = "タグを'" + tag_gender + "', '" + tag_age + "'にセットしました。"                          # タグが両方あるとき
+    if tag_age != 'None': response = "タグを'" + str(tag_age) + "'にセットしました。"         # タグが年代だけあるとき
+    elif tag_gender != 'None': response = "タグを'" + str(tag_gender) + "'にセットしました。"                        # タグが性別だけあるとき
+    else: response = "タグを'" + str(tag_gender) + "', '" + str(tag_age) + "'にセットしました。"                          # タグが両方あるとき
     if reset != 'リセット': return question(response)                                                          # タグをセットしたとき
     else: return question("タグをリセットしました。")                                                           # タグをリセットしたとき    
 
