@@ -6,6 +6,10 @@ import generative_system
 app = Flask(__name__)
 ask = Ask(app, '/')
 
+tag_gender = ''
+tag_age = ''
+tag_reset = ''
+
 # 対話システムを起動
 #system = echo_system.EchoSystem()
 system = generative_system.GenerativeSystem()
@@ -41,6 +45,9 @@ def talk(any_text_a, any_text_b, any_text_c):
 #   受け取ったスロットをまとめて，長いものを抜き出す
     texts = [ any_text_a, any_text_b, any_text_c ]
     text = marge_texts(texts)
+
+##   デバッグ用
+    print("text = ", text)
 #   ユーザ発話を対話システムの応答生成に与える，セッションIDもsession.sessionIdで取得する
 
     mes = system.reply({"utt":text,"sessionId":session.sessionId})
@@ -50,6 +57,26 @@ def talk(any_text_a, any_text_b, any_text_c):
 #   この発話で終了しない場合はquestion（ユーザの応答を待つ）で応答
     else: return question(mes['utt'])
 
+# タグを設定するときに呼び出されるインテント
+@ask.intent('TagIntent', mapping={'gender': 'Gender', 'age': 'Age', 'reset': 'Reset'})
+def tag(gender, age, reset):
+#   タグをセットする
+    global tag_age 
+    tag_age = age
+    global tag_gender
+    tag_gender = gender
+    if reset == 'リセット':
+        tag_age = ''
+        tag_gender = ''
+    
+##デバッグ用
+    print("tag_age = ", tag_age)
+    print("tag_gender = ", tag_gender)
+    print("tag_reset = ", tag_reset)
+
+# questionでセットしたタグを知らせる
+    if reset != 'リセット': return question("タグを'" + tag_gender + "', '" + tag_age + "'にセットしました。")
+    else: return question("タグをリセットしました。")
 if __name__ == '__main__':
 #   port8080でflaskのサーバを起動
     app.run(port=8080)
