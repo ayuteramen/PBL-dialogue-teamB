@@ -6,8 +6,8 @@ import generative_system
 app = Flask(__name__)
 ask = Ask(app, '/')
 
-tag_gender = 'None'
-tag_age = 'None'
+tag_gender = None
+tag_age = None
 
 # 対話システムを起動
 #system = echo_system.EchoSystem()
@@ -51,8 +51,8 @@ def talk(any_text_a, any_text_b, any_text_c):
 #   タグを付ける
     global tag_age, tag_gender
     tag = ''
-    if tag_gender != 'None': tag = '<' + str(tag_gender) + '>'
-    if tag_age != 'None': tag = '<' + str(tag_age) + '>' + tag
+    if tag_gender is not None: tag = '<' + str(tag_gender) + '>'
+    if tag_age is not None: tag = '<' + str(tag_age) + '>' + tag
     text = tag + text
 ##  デバッグ用
     print("text = ", text)
@@ -86,7 +86,7 @@ def tag(gender, age, reset):
 # questionでセットしたタグを知らせる
     tag_response = ''
     if tag_age is not None: tag_response = str(tag_age)                                               # タグが年代だけあるとき
-    if tag_gender is not None: tag_response = tag_response + ',' + str(tag_gender)                        # タグが性別だけあるとき
+    if tag_gender is not None: tag_response = tag_response + str(tag_gender)                        # タグが性別だけあるとき
     response = "タグを'" + tag_response + "'にセットしました。"                          # タグが両方あるとき
     if reset != 'リセット': return question(response)                                                          # タグをセットしたとき
     else: return question("タグをリセットしました。")                                                           # タグをリセットしたとき    
