@@ -7,6 +7,10 @@ f2 = open(sys.argv[1].replace(".txt", "_removed.txt"), 'w', encoding='utf-8')
 # ファイルの内容を読み取る
 text = f.read()
 
+# &lt, &gtを除去する
+text = re.sub(r"&lt;", "", text)
+text = re.sub(r"&gt;", "", text)
+
 # 絵文字を除去する　除去したくない文字を指定する。
 text = re.sub(r'[^\w\s？！、。‼️…・()「」!?.,/～｢｣＼^｡／･＾‥@]', '', text)
 
