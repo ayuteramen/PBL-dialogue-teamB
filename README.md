@@ -48,7 +48,7 @@ TwitterAPIの取得の方法は「Pythonでつくる対話システム」とい�
 
 単語分割はSentencePieceを用いている。  
 SentencePieceは与えられた学習データ（テキスト）から教師なし学習で文字列に分割するためのモデルを生成する。  
-①のファイルと②のモデルは対話A班からもらったものなので、作成方法はA班のものを見てもらいたい。  
+①のファイルと②のモデルは対話A班からもらったものなので、②の作成方法はA班のものを見てもらいたい。  
 
 ファイルは以下の通りにして生成する。  
 ①で"pre_data_not_delate_10count.txt"をtokenizeして"pre_data_not_delate_10count.tok.txt"を生成する。  
@@ -77,7 +77,7 @@ tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10coun
 ここでは次のファイルを使用している。  
 ・① apply-spm.py  
 ・② pre_data_not_delate_10count.model  
-・③ after_text.txt
+・③ after_text.txt  
 
 <ここで作成するファイル>
 ・after.src.train.tok.txt  
@@ -156,6 +156,7 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.
 <ここで作成するファイル>
 ・after.tgt.test.tok.detok.txt
 
+①のファイル対話A班からもらったものである。   
 ①ではファイルをdetokenizeしている。ここで"〇〇.detok.txt"というファイルが生成される。  
 ②ではBLEUの評価値を出している。このとき、正解データ　出力データの順で入力しており、それぞれ単語分けされていない綺麗な文のテキストファイルである。  
 "before_test_tgt.txt"は去年の先輩が使用していた100件各8パターンのタグなしの応答データである。 
