@@ -13,30 +13,30 @@ TwitterAPIの取得の方法は「Pythonでつくる対話システム」とい�
 
 
 
-## 前処理
+## 前処理<タグありデータ＞
 前処理として、絵文字・顔文字の除去、文・単語分割を行っている。  
 
 
 文分割はSentencePieceを用いている。  
 SentencePieceは与えられた学習データ（テキスト）から教師なし学習で文字列に分割するためのモデルを生成する。  モデルは以下のものを使用している。このモデルは対話A班からもらったもので、作成方法はA班のものを見てもらいたい。  
-・pre_data_not_delate_10count.model  
 
 
 
-## 訓練
-訓練は次のファイルを使用している。  　
-・① before_transformer.yaml  
-・② after_transformer.yaml  
-・③ pre_data_not_delate_10count.txt  
-・④ pre_data_not_deleate_10count.src.train.tok.txt  
-・⑤ pre_data_not_deleate_10count.tgt.train.tok.txt  
-・⑥ pre_data_not_deleate_10count.src.valid.tok.txt  
-・⑦ pre_data_not_deleate_10count.tgt.valid.tok.txt  
+## 前処理<タグなしデータ＞
+データ収集では次のファイルを使用している。
+・① pre_data_not_delate_10count.model
+・② pre_data_not_delate_10count.txt  
+<ここで作成するファイル>  
+・③ pre_data_not_deleate_10count.src.train.tok.txt  
+・④ pre_data_not_deleate_10count.tgt.train.tok.txt  
+・⑤ pre_data_not_deleate_10count.src.valid.tok.txt  
+・⑥ pre_data_not_deleate_10count.tgt.valid.tok.txt  
+  
 "pre_data_not_delate_10count.txt"は①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。 
-④~⑦は以下の通りにして生成する。
-
-
+③~⑥は以下の通りにして生成する。
+①でpre_data_not_delate_10count.txt"をtokenizeして
 python apply-spm.py pre_data_not_delate_10count.txt pre_data_not_delate_10count.model  
+
 srcとtgtにファイルを分ける
 cut -f1 pre_data_not_delate_10count.tok.txt | tr "\t" " " >  pre_data_not_delate_10count.src.tok.txt  
 cut -f2 pre_data_not_delate_10count.tok.txt > pre_data_not_delate_10count.tgt.tok.txt  
@@ -54,6 +54,12 @@ tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10coun
 
 
 
+
+
+## 訓練
+訓練は次のファイルを使用している。  　
+・① before_transformer.yaml  
+・② after_transformer.yaml  
 
 事前訓練は以下のように行っている。  
 ここではタグなしデータ2000000件使用している。
@@ -73,7 +79,7 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 ・① apply-spm.py
 ・② before_test_src.txt  
 ・③ pre_data_not_delate_10count.model  
-①では応答生成を行うため、訓練時同様入力文を単語分割している。
+①では応答生成を行うため、前処理時同様入力文を単語分割している。
 "before_test_src.txt"は去年の先輩が使用していた100件のタグなしの発話データである。
 実行は以下のように行っている。  
 python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model  
