@@ -29,6 +29,7 @@ SentencePieceは与えられた学習データ（テキスト）から教師な�
 onmt_build_vocab -config "before_transformer.yaml" -n_sample 2000000  
 onmt_train -config "before_transformer.yaml"   
 
+
 再訓練は以下のようにして行っている。  
 今回は事前訓練を350000ステップ時のモデルから再開して再訓練している。  
 onmt_build_vocab -config "after_transformer.yaml" -n_sample 150000 -skip_empty_level silent -overwrite　　
