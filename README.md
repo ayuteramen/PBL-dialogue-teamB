@@ -2,8 +2,8 @@
 
 ## データ収集
 データ収集では次のファイルを使用している。  
-  ① collect_data.py  
-  ② Twitter_API (1).ipynb  
+    ① collect_data.py  
+    ② Twitter_API (1).ipynb  
 ①ではタグなしでとっており、②は年齢・性別のタグをつけて収集をしている。  
 これらのデータは後の事前訓練、再訓練でそれぞれ使用する。  
 
