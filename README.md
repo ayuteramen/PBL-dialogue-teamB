@@ -3,7 +3,7 @@
 ## データ収集
 ここでは次のファイルを使用している。  
 ・① collect_data.py  
-・② Twitter_API (1).ipynb  
+・② Twitter_API (1).ipynb    
 ①ではタグなしでとっており、②は年齢・性別のタグをつけて収集をしている。  
 これらのデータは後の事前訓練、再訓練でそれぞれ使用する。  
 "api_key", "api_secret_key", "access_token", "access_token_secret"はTwitterAPIを取得することで分かる。  
@@ -14,10 +14,11 @@ TwitterAPIの取得の方法は「Pythonでつくる対話システム」とい�
 
 
 ## 前処理<タグなしデータ＞
-ここでは次のファイルを使用している。
+ここでは次のファイルを使用している。  
 ・① apply-spm.py  
 ・② pre_data_not_delate_10count.model
 ・③ pre_data_not_delate_10count.txt  
+
 <ここで作成するファイル>  
 ・pre_data_not_deleate_10count.src.train.tok.txt  
 ・pre_data_not_deleate_10count.tgt.train.tok.txt  
@@ -25,21 +26,27 @@ TwitterAPIの取得の方法は「Pythonでつくる対話システム」とい�
 ・pre_data_not_deleate_10count.tgt.valid.tok.txt  
 
 "pre_data_not_delate_10count.txt"はデータ収集①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。 
+その時の前処理のファイルはA班の方を見に行ってもらいたい。  
+
 単語分割はSentencePieceを用いている。  
 SentencePieceは与えられた学習データ（テキスト）から教師なし学習で文字列に分割するためのモデルを生成する。  
-②のモデルは以下のものを使用している。このモデルは対話A班からもらったもので、作成方法はA班のものを見てもらいたい。  
-ファイルは以下の通りにして生成する。
-①で"pre_data_not_delate_10count.txt"をtokenizeして"pre_data_not_delate_10count.tok.txt"を生成する。
+①のファイルと②のモデルは対話A班からもらったものなので、作成方法はA班のものを見てもらいたい。  
+
+ファイルは以下の通りにして生成する。  
+①で"pre_data_not_delate_10count.txt"をtokenizeして"pre_data_not_delate_10count.tok.txt"を生成する。  
 python apply-spm.py pre_data_not_delate_10count.txt pre_data_not_delate_10count.model  
-srcとtgtにファイルを分ける
+
+srcとtgtにファイルを分ける  
 cut -f1 pre_data_not_delate_10count.tok.txt | tr "\t" " " >  pre_data_not_delate_10count.src.tok.txt  
 cut -f2 pre_data_not_delate_10count.tok.txt > pre_data_not_delate_10count.tgt.tok.txt  
+
 train(2000000件)を作成する。  
 head -2000000 pre_data_not_delate_10count.src.tok.txt >  pre_data_not_delate_10count.src.train.tok.txt  
 head -2000000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10count.tgt.train.tok.txt  
+
 valid(2000件)を作成する。  
-tail -2000 pre_data_not_delate_10count.src.tok.txt >  pre_data_not_delate_10count.src.valid.tok.txt
-tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10count.src.valid.tok.txt
+tail -2000 pre_data_not_delate_10count.src.tok.txt >  pre_data_not_delate_10count.src.valid.tok.txt  
+tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10count.src.valid.tok.txt  
 
 
 
@@ -48,44 +55,38 @@ tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10coun
 
 
 
-単語分割はSentencePieceを用いている。  
+"fter_text.txt"はデータ収集①のファイルを使用して収集し、前処理を行ったタグありデータ156102件のデータである。 
+単語分割は前処理<タグなしデータ＞と同様にSentencePieceを用いている。  
 
-after_text.txt
-after_test_tgt.txt
-after_test_src.tok.txt
+ここでは次のファイルを使用している。  
+・① apply-spm.py  
+・② pre_data_not_delate_10count.model
+・③ after_text.txt
+
 <ここで作成するファイル>
 ・after.src.train.tok.txt  
 ・after.tgt.train.tok.txt  
 ・after.src.valid.tok.txt  
 ・after.tgt.valid.tok.txt  
+・after.src.test.tok.txt  
+・after.tgt.test.tok.txt  
 
-156102件
-python apply-spm.py pre_data_not_delate_10count.txt pre_data_not_delate_10count.model
+ファイルは以下の通りにして生成する。 
+cut -f1 after_text.txt > after_text_tag.txt　# タグだけのデータ  
+cut -f2 after_text.txt > after_text_src.txt　# 発話だけのデータ  
+cut -f3 after_text.txt > after_text_tgt.txt　# 応答だけのデータ   
 
-cut -f1 after_text.txt > after_text_tag.txt # タグだけのデータ  
-cut -f2 after_text.txt > after_text_src.txt # 発話だけのデータ  
-cut -f3 after_text.txt > after_text_tgt.txt # 応答だけのデータ   
+python apply-spm.py after_text_src.txt pre_data_not_delate_10count.model　# tokenizeして"after_text_src.tok.txt"作成
+python apply-spm.py after_text_tgt.txt pre_data_not_delate_10count.model　# tokenizeして"after_text_tgt.tok.txt"作成
 
-paste -d " " tag_src.tok.txt tag_space.txt > tag_tag_src.tok.txt
-head -150000 tag_tag_src.tok.txt > after.src.train.tok.txt
-head -150000 tag_tgt.tok.txt > after.tgt.train.tok.txt
-tail -3000 tag_tag_src.tok.txt | head -1500 > tag_tag_src.tok.valid.txt 
-tail -500 tag_tag_src.tok.txt > tag_tag_src.tok.test.txt
-tail -3000 tag_tgt.tok.txt | head -1500 > tag_tgt.tok.valid.txt 
-tail -500 tag_tgt.tok.txt > tag_tgt.tok.test.txt
+paste -d " " after_text_src.tok.txt after_text_tag.txt > after.src.tok.txt 　# 発話＋タグのデータ  
 
-tail -3000 text.txt | head -500 > new_test.txt
-tail -500 text.txt > new_test.txt
-
-python apply-spm.py new_test_src.txt pre_data_not_delate_10count.model
-paste -d " " new_test_src.tok.txt new_test_tag.txt > new_test_src_tag.tok.txt
-
-
-
-
-
-
-
+head -150000 after.src.tok.txt > after.src.train.tok.txt　# train(150000件)作成  
+head -150000 after_text_tgt.tok.txt > after.tgt.train.tok.txt　# train(150000件)作成  
+tail -3000 after.src.tok.txt | head -1500 > after.src.valid.tok.txt　# valid(1500件)作成    
+tail -3000 after_text_tgt.tok.txt | head -1500 > after.tgt.valid.tok.txt　# valid(1500件)作成  
+tail -300 after.src.tok.txt > after.src.test.tok.txt　 # test(300件)作成  
+tail -300 after_text_tgt.tok.txt > after.tgt.test.tok.txt　# test(300件)作成
 
 
 
@@ -116,8 +117,7 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 "before_test_src.txt"は去年の先輩が使用していた100件のタグなしの発話データである。
 実行は以下のように行っている。  
 python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model  
-
-翻訳は以下のように行っている。  
+  
 今回は事前訓練時の500000ステップ時のモデルの評価を行っている。  
 -src ではtokenizeしたテストデータを入力している。  
 -output は翻訳結果を出力するファイル名である。  
