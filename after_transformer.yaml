@@ -2,11 +2,11 @@
 
 data:
     train:
-        path_src: tag_tag_src.tok.train.txt
-        path_tgt: tag_tgt.tok.train.txt
+        path_src: after.src.train.tok.txt  
+        path_tgt: after.tgt.train.tok.txt  
     valid:
-        path_src: tag_tag_src.tok.valid.txt
-        path_tgt: tag_tgt.tok.valid.txt
+        path_src: after.src.valid.tok.txt  
+        path_tgt: after.tgt.valid.tok.txt  
 
 save_data: vocab2
 src_vocab: vocab2/vocab.src
