@@ -153,7 +153,7 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.
 ・③ before_test_tgt.txt  
 ・④ after.tgt.test.tok.txt  
 
-<ここで作成するファイル>
+<ここで作成するファイル>  
 ・after.tgt.test.tok.detok.txt
 
 ①のファイル対話A班からもらったものである。   
