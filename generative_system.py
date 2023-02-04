@@ -22,7 +22,7 @@ class GenerativeSystem:
         # self.mecab = MeCab.Tagger("-Owakati")
         # self.mecab.parse("")
         self.tokenizer = spm.SentencePieceProcessor()
-        self.tokenizer.Load("/home/teramen/honban/pre_data_not_delate_10count.model") # パスを変更する！
+        self.tokenizer.Load("pre_data_not_delate_10count.model")
         ### 
 
     def initial_message(self, input):
@@ -66,11 +66,11 @@ class GenerativeSystem:
         command = list()
         command.append("onmt_translate")
         command.append("-model")
-        command.append("/home/teramen/honban/model2_transformer_350000/transformer_step_470000.pt")
+        command.append("after_transformer_step_470000.pt")
         command.append("-src")
-        command.append("/home/teramen/honban/tmp-src.txt")
+        command.append("tmp-src.txt")
         command.append("-output")
-        command.append("/home/teramen/honban/tmp-pred.txt")
+        command.append("tmp-pred.txt")
         command.append("-gpu")
         command.append("0")
         result = subprocess.run(command, stdout=subprocess.PIPE, text=True)
