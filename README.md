@@ -137,7 +137,7 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 ①では応答生成を行うため、前処理時同様入力文を単語分割している。
 "before_test_src.txt"は去年の先輩が使用していた100件のタグなしの発話データである。
 
-python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model  # tokenizeして"before_text_src.tok.txt"作成
+python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model　# tokenizeして"before_text_src.tok.txt"作成
   
 今回は事前訓練時の500000ステップ時のモデルの評価を行っている。  
 -src ではtokenizeしたテストデータを入力している。  
@@ -201,7 +201,7 @@ Alexaとの接続ページで「4.接続テスト」の「4.上部のテスト�
 [年代] : 10代 / 20代 / 40代  
 [性別] : 男性 / 女性  
 
-ここでの年代はそれぞれ以下を指定している。
+ここでの年代はそれぞれ以下を指定している。  
 10代 : 10代  
 20代 : 20～30代  
 40代 : 40～60代  
