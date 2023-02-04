@@ -1,7 +1,7 @@
 # PBL-dialogue-teamB 
 
 ## データ収集
-データ収集では次のファイルを使用している。  
+ここでは次のファイルを使用している。  
 ・① collect_data.py  
 ・② Twitter_API (1).ipynb  
 ①ではタグなしでとっており、②は年齢・性別のタグをつけて収集をしている。  
@@ -13,29 +13,22 @@ TwitterAPIの取得の方法は「Pythonでつくる対話システム」とい�
 
 
 
-## 前処理<タグありデータ＞
-前処理として、絵文字・顔文字の除去、文・単語分割を行っている。  
-
-
-文分割はSentencePieceを用いている。  
-SentencePieceは与えられた学習データ（テキスト）から教師なし学習で文字列に分割するためのモデルを生成する。  
-モデルは以下のものを使用している。このモデルは対話A班からもらったもので、作成方法はA班のものを見てもらいたい。  
-
-
-
 ## 前処理<タグなしデータ＞
-データ収集では次のファイルを使用している。
+ここでは次のファイルを使用している。
 ・① apply-spm.py  
 ・② pre_data_not_delate_10count.model
 ・③ pre_data_not_delate_10count.txt  
 <ここで作成するファイル>  
-・④ pre_data_not_deleate_10count.src.train.tok.txt  
-・⑤ pre_data_not_deleate_10count.tgt.train.tok.txt  
-・⑥ pre_data_not_deleate_10count.src.valid.tok.txt  
-・⑦ pre_data_not_deleate_10count.tgt.valid.tok.txt  
-  
+・pre_data_not_deleate_10count.src.train.tok.txt  
+・pre_data_not_deleate_10count.tgt.train.tok.txt  
+・pre_data_not_deleate_10count.src.valid.tok.txt  
+・pre_data_not_deleate_10count.tgt.valid.tok.txt  
+
 "pre_data_not_delate_10count.txt"はデータ収集①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。 
-④~⑦は以下の通りにして生成する。
+単語分割はSentencePieceを用いている。  
+SentencePieceは与えられた学習データ（テキスト）から教師なし学習で文字列に分割するためのモデルを生成する。  
+②のモデルは以下のものを使用している。このモデルは対話A班からもらったもので、作成方法はA班のものを見てもらいたい。  
+ファイルは以下の通りにして生成する。
 ①で"pre_data_not_delate_10count.txt"をtokenizeして"pre_data_not_delate_10count.tok.txt"を生成する。
 python apply-spm.py pre_data_not_delate_10count.txt pre_data_not_delate_10count.model  
 srcとtgtにファイルを分ける
@@ -50,8 +43,54 @@ tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10coun
 
 
 
+## 前処理<タグありデータ＞
+前処理として、絵文字・顔文字の除去、文・単語分割を行っている。  
+
+
+
+単語分割はSentencePieceを用いている。  
+
+after_text.txt
+after_test_tgt.txt
+after_test_src.tok.txt
+<ここで作成するファイル>
+・after.src.train.tok.txt  
+・after.tgt.train.tok.txt  
+・after.src.valid.tok.txt  
+・after.tgt.valid.tok.txt  
+
+156102件
+python apply-spm.py pre_data_not_delate_10count.txt pre_data_not_delate_10count.model
+
+cut -f1 after_text.txt > after_text_tag.txt # タグだけのデータ  
+cut -f2 after_text.txt > after_text_src.txt # 発話だけのデータ  
+cut -f3 after_text.txt > after_text_tgt.txt # 応答だけのデータ   
+
+paste -d " " tag_src.tok.txt tag_space.txt > tag_tag_src.tok.txt
+head -150000 tag_tag_src.tok.txt > after.src.train.tok.txt
+head -150000 tag_tgt.tok.txt > after.tgt.train.tok.txt
+tail -3000 tag_tag_src.tok.txt | head -1500 > tag_tag_src.tok.valid.txt 
+tail -500 tag_tag_src.tok.txt > tag_tag_src.tok.test.txt
+tail -3000 tag_tgt.tok.txt | head -1500 > tag_tgt.tok.valid.txt 
+tail -500 tag_tgt.tok.txt > tag_tgt.tok.test.txt
+
+tail -3000 text.txt | head -500 > new_test.txt
+tail -500 text.txt > new_test.txt
+
+python apply-spm.py new_test_src.txt pre_data_not_delate_10count.model
+paste -d " " new_test_src.tok.txt new_test_tag.txt > new_test_src_tag.tok.txt
+
+
+
+
+
+
+
+
+
+
 ## 訓練
-訓練は次のファイルを使用している。  　
+ここでは次のファイルを使用している。  　
 ・① before_transformer.yaml  
 ・② after_transformer.yaml  
 
@@ -69,7 +108,7 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 
 
 ## 応答生成
-応答生成は次のファイルを使用している。
+ここでは次のファイルを使用している。
 ・① apply-spm.py
 ・② before_test_src.txt  
 ・③ pre_data_not_delate_10count.model  
@@ -87,7 +126,7 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.
 
 
 ## 評価
-評価は以下のファイルを使っている。  
+ここでは次のファイルを使用している。
 ・① detok-spm.py  
 ・② bleu.py  
 ・③ before_test_tgt.txt
@@ -104,8 +143,8 @@ python bleu.py before_test_tgt.txt pred.detok.txt
 Alexaとの接続方法は以下のページに記載してある。  
 https://github.com/nagaratokuma/PBL_Alexa_.git  
 なお、上のページから次の2ファイルを変更している。  
-・alexa_bot.py  
-・generative_system.py  
+・①alexa_bot.py  
+・②generative_system.py  
 また、ここでも以下のモデルを使用している。  
-・pre_data_not_delate_10count.model  
+・③pre_data_not_delate_10count.model  
 ここでは、470000ステップ時のモデルを使用して接続を行っている。
