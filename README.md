@@ -111,7 +111,7 @@ tail -300 after_text_tgt.tok.txt > after.tgt.test.tok.txt　# test(300件)作成
 
 
 ## 訓練
-ここでは次のファイルを使用している。  　
+ここでは次のファイルを使用している。  
 ・① before_transformer.yaml  
 ・② after_transformer.yaml  
 
@@ -151,7 +151,7 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.
 ・① detok-spm.py  
 ・② bleu.py  
 ・③ before_test_tgt.txt  
-・④ after.tgt.test.tok.txt
+・④ after.tgt.test.tok.txt  
 
 <ここで作成するファイル>
 ・after.tgt.test.tok.detok.txt
@@ -203,7 +203,7 @@ Alexaとの接続ページで「4.接続テスト」の「4.上部のテスト�
 
 ここでの年代はそれぞれ以下を指定している。
 10代 : 10代  
-20代 : 20~30代  
-40代 : 40~60代  
+20代 : 20～30代  
+40代 : 40～60代  
 
 
