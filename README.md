@@ -6,10 +6,10 @@
 ・② Twitter_API (1).ipynb  
 ①ではタグなしでとっており、②は年齢・性別のタグをつけて収集をしている。  
 これらのデータは後の事前訓練、再訓練でそれぞれ使用する。  
-"api_key", "api_secret_key", "access_token", "access_token_secret" はTwitterAPIを取得することで分かる。  
+"api_key", "api_secret_key", "access_token", "access_token_secret"はTwitterAPIを取得することで分かる。  
 TwitterAPIの取得の方法は「Pythonでつくる対話システム」という本の3.4章に記載がされてあった。  
 ネットで調べても出てくると思われる。  
-※TwitterAPIが有料化される模様  
+※2023/02/09以降TwitterAPIが有料化される模様  
 
 
 
@@ -27,11 +27,21 @@ SentencePieceは与えられた学習データ（テキスト）から教師な�
 訓練は次のファイルを使用している。  　
 ・before_transformer.yaml  
 ・after_transformer.yaml  
+・pre_data_not_delate_10count.txt  
+・pre_data_not_deleate_10count.src.train.tok.txt
+・pre_data_not_deleate_10count.tgt.train.tok.txt
+・pre_data_not_deleate_10count.src.valid.tok.txt
+・pre_data_not_deleate_10count.tgt.valid.tok.txt
+"pre_data_not_delate_10count.txt"は①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。
+
+
+
+
 
 事前訓練は以下のように行っている。  
 ここではタグなしデータ2000000件使用している。
 onmt_build_vocab -config "before_transformer.yaml" -n_sample 2000000  
-onmt_train -config "before_transformer.yaml"  
+onmt_train -config "before_transformer.yaml"
 
 再訓練は以下のようにして行っている。  
 ここではタグありデータ150000件使用している。  
@@ -41,12 +51,21 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 
 
 
-## 翻訳
+## 応答生成
+応答生成は次のファイルを使用している。
+・① apply-spm.py
+・② before_test_src.txt  
+・③ pre_data_not_delate_10count.model  
+①では応答生成を行うため、訓練時同様入力文を単語分割している。
+"before_test_src.txt"は去年の先輩が使用していた100件のタグなしの発話データである。
+実行は以下のように行っている。  
+python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model  
+
 翻訳は以下のように行っている。  
 今回は事前訓練時の500000ステップ時のモデルの評価を行っている。  
 -src ではtokenizeしたテストデータを入力している。  
 -output は翻訳結果を出力するファイル名である。  
-onmt_translate -model "before_transformer_step_500000.pt" -src "test_data.tok.txt" -output "pred.txt"  -verbose  
+onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.tok.txt" -output "pred.txt"  -verbose  
 
 
 
@@ -54,11 +73,13 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "test_data.tok.tx
 評価は以下のファイルを使っている。  
 ・① detok-spm.py  
 ・② bleu.py  
-①では翻訳で出力されたファイルをdetokenizeしている。これは、②で入力するファイルの形を整えるためである。  
+・③ before_test_tgt.txt
+①では翻訳で出力されたファイルをdetokenizeしている。これは、②で入力するファイルの形を整えるためである。ここで"pred.detok.txt"というファイルが生成される。  
 ②ではBLEUの評価値を出している。このとき、正解データ　出力データの順で入力しており、それぞれ単語分けされていない綺麗な文のテキストファイルである。  
+"before_test_tgt.txt"は去年の先輩が使用していた100件のタグなしの発話データである。 
 実行は以下のように行っている。  
 python detok-spm.py "pred.txt"  
-python bleu.py test_ans.txt pred.detok.txt  
+python bleu.py before_test_tgt.txt pred.detok.txt  
 
 
 
