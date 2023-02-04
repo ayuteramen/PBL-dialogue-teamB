@@ -5,10 +5,10 @@ import re
 
 while True:
     # ここに先程取得したAPIキーとトークンを入力
-    api_key = "yDw48aKG3Trf56AHoCNBp558l"
-    api_secret_key = "2XU9UfJgUGlhKJwDe7dIIHOJZ828EZqheWs8niCV6jvH5TxiZg"
-    access_token = "3041224710-AMaUeWnNloLRGcitnx5lAsIrdIh59jC5ehWkfeX"
-    access_token_secret = "4238EOYuICrESgWiH3ZDx35o8hiE1QWPFPx061hygy14u"
+    api_key = ""
+    api_secret_key = ""
+    access_token = ""
+    access_token_secret = ""
 
     auth = tweepy.OAuthHandler(api_key, api_secret_key)
     auth.set_access_token(access_token, access_token_secret)
