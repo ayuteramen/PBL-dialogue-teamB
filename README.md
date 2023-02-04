@@ -1,11 +1,21 @@
 # PBL-dialogue-teamB 
 
+## 最初に
+対話B班では、個性を付与した雑談対話システムを作ることを目的としている。  
+ここで言う個性とは年代と性別という属性であり、以降で作成するタグによって個性を制御しようとしている。  
+データとしてはTwitterのツイートデータである。  
+所々対話A班と共同で行っている場面があるため、こちらにコードがない場面がある。  
+
+
+
 ## データ収集
 ここでは次のファイルを使用している。  
 ・① collect_data.py  
 ・② Twitter_API (1).ipynb    
-①ではタグなしでとっており、②は年齢・性別のタグをつけて収集をしている。  
+
+①ではタグなしでとっており、②は年代・性別のタグをつけて収集をしている。  
 これらのデータは後の事前訓練、再訓練でそれぞれ使用する。  
+
 "api_key", "api_secret_key", "access_token", "access_token_secret"はTwitterAPIを取得することで分かる。  
 TwitterAPIの取得の方法は「Pythonでつくる対話システム」という本の3.4章に記載がされてあった。  
 ネットで調べても出てくると思われる。  
@@ -25,7 +35,7 @@ TwitterAPIの取得の方法は「Pythonでつくる対話システム」とい�
 ・pre_data_not_deleate_10count.src.valid.tok.txt  
 ・pre_data_not_deleate_10count.tgt.valid.tok.txt  
 
-"pre_data_not_delate_10count.txt"はデータ収集①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。 
+"pre_data_not_delate_10count.txt"は「データ収集」の①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。 
 その時の前処理のファイルはA班の方を見に行ってもらいたい。  
 
 単語分割はSentencePieceを用いている。  
@@ -55,8 +65,6 @@ tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10coun
 
 
 
-"fter_text.txt"はデータ収集①のファイルを使用して収集し、前処理を行ったタグありデータ156102件のデータである。 
-単語分割は前処理<タグなしデータ＞と同様にSentencePieceを用いている。  
 
 ここでは次のファイルを使用している。  
 ・① apply-spm.py  
@@ -71,11 +79,15 @@ tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10coun
 ・after.src.test.tok.txt  
 ・after.tgt.test.tok.txt  
 
+"after_text.txt"は「データ収集」の①のファイルを使用して収集し、前処理を行ったタグありデータ156102件のデータである。 
+単語分割は「前処理<タグなしデータ＞」と同様にSentencePieceを用いている。  
+
 ファイルは以下の通りにして生成する。 
 cut -f1 after_text.txt > after_text_tag.txt　# タグだけのデータ  
 cut -f2 after_text.txt > after_text_src.txt　# 発話だけのデータ  
 cut -f3 after_text.txt > after_text_tgt.txt　# 応答だけのデータ   
 
+そのままtokenizeするとタグが分割されてしまうため、タグを分けてからtokenizeを行う。  
 python apply-spm.py after_text_src.txt pre_data_not_delate_10count.model　# tokenizeして"after_text_src.tok.txt"作成
 python apply-spm.py after_text_tgt.txt pre_data_not_delate_10count.model　# tokenizeして"after_text_tgt.tok.txt"作成
 
@@ -100,7 +112,7 @@ tail -300 after_text_tgt.tok.txt > after.tgt.test.tok.txt　# test(300件)作成
 onmt_build_vocab -config "before_transformer.yaml" -n_sample 2000000  
 onmt_train -config "before_transformer.yaml"
 
-再訓練は以下のようにして行っている。  
+再訓練は以下のように行っている。  
 ここではタグありデータ150000件使用している。  
 今回は事前訓練を350000ステップ時のモデルから再開して再訓練している。  
 onmt_build_vocab -config "after_transformer.yaml" -n_sample 150000 -skip_empty_level silent -overwrite  
@@ -111,12 +123,13 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 ## 応答生成
 ここでは次のファイルを使用している。
 ・① apply-spm.py
-・② before_test_src.txt  
-・③ pre_data_not_delate_10count.model  
+・② pre_data_not_delate_10count.model  
+・③ before_test_src.txt  
+
 ①では応答生成を行うため、前処理時同様入力文を単語分割している。
 "before_test_src.txt"は去年の先輩が使用していた100件のタグなしの発話データである。
-実行は以下のように行っている。  
-python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model  
+
+python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model  # tokenizeして"before_text_src.tok.txt"作成
   
 今回は事前訓練時の500000ステップ時のモデルの評価を行っている。  
 -src ではtokenizeしたテストデータを入力している。  
@@ -129,13 +142,24 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.
 ここでは次のファイルを使用している。
 ・① detok-spm.py  
 ・② bleu.py  
-・③ before_test_tgt.txt
-①では翻訳で出力されたファイルをdetokenizeしている。これは、②で入力するファイルの形を整えるためである。ここで"pred.detok.txt"というファイルが生成される。  
+・③ before_test_tgt.txt  
+・④ after.tgt.test.tok.txt
+
+<ここで作成するファイル>
+
+①ではファイルをdetokenizeしている。ここで"〇〇.detok.txt"というファイルが生成される。  
 ②ではBLEUの評価値を出している。このとき、正解データ　出力データの順で入力しており、それぞれ単語分けされていない綺麗な文のテキストファイルである。  
-"before_test_tgt.txt"は去年の先輩が使用していた100件のタグなしの発話データである。 
-実行は以下のように行っている。  
-python detok-spm.py "pred.txt"  
-python bleu.py before_test_tgt.txt pred.detok.txt  
+"before_test_tgt.txt"は去年の先輩が使用していた100件各8パターンのタグなしの応答データである。 
+
+評価は以下のように行っている。
+<事前訓練時の評価>  
+python detok-spm.py "pred.txt"　# detokenizeして"pred.detok.txt"作成  
+python bleu.py before_test_tgt.txt pred.detok.txt　# 事前訓練時の評価  
+
+<再訓練時の評価>  
+python detok-spm.py "after.tgt.test.tok.txt"　# detokenizeして"after.tgt.test.tok.detok.txt"作成  
+python detok-spm.py "pred.txt"　# detokenizeして"pred.detok.txt"作成  
+python bleu.py after.tgt.test.tok.detok.txt pred.detok.txt　# 再訓練時の評価  
 
 
 
