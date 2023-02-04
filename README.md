@@ -14,7 +14,7 @@ TwitterAPIの取得の方法は「Pythonでつくる対話システム」とい�
 
 
 ## 前処理
-前処理として、絵文字・顔文字の除去、文分割を行っている。  
+前処理として、絵文字・顔文字の除去、文・単語分割を行っている。  
 
 
 文分割はSentencePieceを用いている。  
@@ -25,14 +25,31 @@ SentencePieceは与えられた学習データ（テキスト）から教師な�
 
 ## 訓練
 訓練は次のファイルを使用している。  　
-・before_transformer.yaml  
-・after_transformer.yaml  
-・pre_data_not_delate_10count.txt  
-・pre_data_not_deleate_10count.src.train.tok.txt
-・pre_data_not_deleate_10count.tgt.train.tok.txt
-・pre_data_not_deleate_10count.src.valid.tok.txt
-・pre_data_not_deleate_10count.tgt.valid.tok.txt
-"pre_data_not_delate_10count.txt"は①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。
+・① before_transformer.yaml  
+・② after_transformer.yaml  
+・③ pre_data_not_delate_10count.txt  
+・④ pre_data_not_deleate_10count.src.train.tok.txt  
+・⑤ pre_data_not_deleate_10count.tgt.train.tok.txt  
+・⑥ pre_data_not_deleate_10count.src.valid.tok.txt  
+・⑦ pre_data_not_deleate_10count.tgt.valid.tok.txt  
+"pre_data_not_delate_10count.txt"は①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。 
+④~⑦は以下の通りにして生成する。
+
+
+python apply-spm.py pre_data_not_delate_10count.txt pre_data_not_delate_10count.model  
+srcとtgtにファイルを分ける
+cut -f1 pre_data_not_delate_10count.tok.txt | tr "\t" " " >  pre_data_not_delate_10count.src.tok.txt  
+cut -f2 pre_data_not_delate_10count.tok.txt > pre_data_not_delate_10count.tgt.tok.txt  
+
+trainを作る
+head -2000000 pre_data_not_delate_10count.src.tok.txt >  pre_data_not_delate_10count.src.train.tok.txt  
+head -2000000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10count.tgt.train.tok.txt  
+
+validを作る
+tail -2000 pre_data_not_delate_10count.src.tok.txt >  pre_data_not_delate_10count.src.valid.tok.txt
+tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10count.src.valid.tok.txt
+
+
 
 
 
