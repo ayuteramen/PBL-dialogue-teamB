@@ -6,6 +6,10 @@
 ・② Twitter_API (1).ipynb  
 ①ではタグなしでとっており、②は年齢・性別のタグをつけて収集をしている。  
 これらのデータは後の事前訓練、再訓練でそれぞれ使用する。  
+"api_key", "api_secret_key", "access_token", "access_token_secret" はTwitterAPIを取得することで分かる。  
+TwitterAPIの取得の方法は「Pythonでつくる対話システム」という本の3.4章に記載がされてあった。  
+ネットで調べても出てくると思われる。  
+※TwitterAPIが有料化される模様  
 
 
 
