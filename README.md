@@ -2,8 +2,8 @@
 
 ## データ収集
 データ収集では次のファイルを使用している。  
-    ① collect_data.py  
-    ② Twitter_API (1).ipynb  
+・① collect_data.py  
+・② Twitter_API (1).ipynb  
 ①ではタグなしでとっており、②は年齢・性別のタグをつけて収集をしている。  
 これらのデータは後の事前訓練、再訓練でそれぞれ使用する。  
 
@@ -22,8 +22,8 @@ SentencePieceは与えられた学習データ（テキスト）から教師な�
 
 ## 訓練
 訓練は次のファイルを使用している。　　
-  ・before_transformer.yaml  
-  ・after_transformer.yaml  
+・before_transformer.yaml  
+・after_transformer.yaml  
 
 事前訓練は以下のように行っている。  
 onmt_build_vocab -config "before_transformer.yaml" -n_sample 2000000  
@@ -43,8 +43,8 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "test_data.tok.tx
 
 ## 評価
 評価は以下のファイルを使っている。  
-  ① detok-spm.py  
-  ② bleu.py  
+・① detok-spm.py  
+・② bleu.py  
 ①では翻訳で出力されたファイルをdetokenizeしている。これは、②で入力するファイルの形を整えるためである。  
 ②ではBLEUの評価値を出している。このとき、正解データ　出力データの順で入力しており、それぞれ単語分けされていない綺麗な文のテキストファイルである。  
 実行は以下のように行っている。  
@@ -57,8 +57,8 @@ python bleu.py test_ans.txt pred.detok.txt
 Alexaとの接続方法は以下のページに記載してある。  
 https://github.com/nagaratokuma/PBL_Alexa_.git  
 なお、上のページから次の2ファイルを変更している。  
-  ・alexa_bot.py  
-  ・generative_system.py  
+・alexa_bot.py  
+・generative_system.py  
 また、ここでも以下のモデルを使用している。
-  ・pre_data_not_delate_10count.model 
+・pre_data_not_delate_10count.model 
 ここでは、470000ステップ時のモデルを使用して接続を行っている。
