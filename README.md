@@ -2,6 +2,7 @@
 
 ## Twitter_API(1).ipynb
 **データを書き込むファイル**
+
 tweet_pair.txt　：タグ ＋ ツイート ＋ リプライ
 
 reply_user.txt：スクリーンネーム ＋ タグ ＋ ツイート ＋ リプライ
