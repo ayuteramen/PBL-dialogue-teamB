@@ -71,8 +71,14 @@ tail -2000 pre_data_not_delate_10count.tgt.tok.txt >  pre_data_not_delate_10coun
 ## 前処理<タグありデータ＞
 前処理として、絵文字・顔文字の除去、文・単語分割を行っている。  
 
+絵文字・顔文字の除去は次のファイルを使用している。  
+・tweet_preprocess.py
 
+以下のように絵文字・顔文字除去したいファイル名を指定して実行することで絵文字・顔文字を除去したファイルが生成される。
 
+python3 tweet_preprocess.py [ファイル名]
+
+生成されるファイル名は指定したファイル名の".txt"を"_removed.txt"に置き換えたものになる。
 
 ここでは次のファイルを使用している。  
 ・① apply-spm.py  
