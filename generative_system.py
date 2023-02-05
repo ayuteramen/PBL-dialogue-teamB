@@ -60,7 +60,7 @@ class GenerativeSystem:
         #     batch_size=self.opt.batch_size,
         #     attn_debug=False
         # )
-        fout = open("/home/teramen/honban/tmp-src.txt", "w")
+        fout = open("tmp-src.txt", "w")
         fout.write(src + "\n")
         fout.close()
         command = list()
