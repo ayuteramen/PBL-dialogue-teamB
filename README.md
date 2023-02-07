@@ -8,6 +8,8 @@
 ※所々対話A班と共同で行っている場面があるため、こちらにコードがない場面がある。  
 ※ここに載せているコードは実際に自分の使っていたものを分かりやすくするために変更しているので、うまくいかない場合がある可能性がある。  
 
+全体の流れとしては、「前準備」、「データ収集」、「前処理」、「訓練」、「応答生成」、「評価」、「Alexaと接続・対話」の順となる。
+
 
 
 ## 前準備
@@ -20,6 +22,10 @@ https://github.com/hirokiyamauch/PBL_dialog
 ここでは次のファイルを使用している。  
 ・① collect_data.py  
 ・② collect_tag_data.py
+
+<ここで作成するファイル>
+・tweet_pairs.txt
+・tweet_pairs_tag.txt
 
 ①ではタグなしでとっており、②は年代・性別のタグをつけて収集をしている。  
 これらのデータは後の事前訓練、再訓練でそれぞれ使用する。  
@@ -50,7 +56,7 @@ python collect_tag_data.py
 ・pre_data_not_deleate_10count.src.valid.tok.txt  
 ・pre_data_not_deleate_10count.tgt.valid.tok.txt  
 
-"pre_data_not_delate_10count.txt"は「データ収集」の①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。  
+"pre_data_not_delate_10count.txt"は「データ収集」の①のファイルを使用して対話A班と共同で集め（tweet_pairs.txt）、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。  
 その時の前処理のファイルはA班の方を見に行ってもらいたい。  
 https://github.com/miyatarina/PBL-dialogue-teamA  
 
@@ -70,12 +76,20 @@ bash before_split.sh
 前処理として、絵文字・顔文字の除去、文・単語分割を行っている。  
 
 絵文字・顔文字の除去は次のファイルを使用している。  
-・tweet_preprocess.py
+・① tweet_preprocess.py
+
+<ここで作成するファイル>
+・after_text.txt
 
 以下のように絵文字・顔文字除去したいファイル名を指定して実行することで絵文字・顔文字を除去したファイルが生成される。  
 生成されるファイル名は指定したファイル名の".txt"を"_removed.txt"に置き換えたものになる。  
 ```
-python3 tweet_preprocess.py [ファイル名]
+python3 tweet_preprocess.py tweet_pairs_tag.txt  
+```
+
+ここで便宜上、"tweet_pairs_tag_removed.txt"を"after_text.txt"に名前を変更する。  
+```
+mv tweet_pairs_tag_removed.txt after_text.txt
 ```
 
 ここでは次のファイルを使用している。  
@@ -101,6 +115,7 @@ bash after_split.sh
 ```
 
 
+
 ## 訓練
 ここでは次のファイルを使用している。  
 ・① before_transformer.yaml  
@@ -122,6 +137,7 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 ```
 
 
+
 ## 応答生成
 ここでは次のファイルを使用している。  
 ・① apply-spm.py  
@@ -140,6 +156,7 @@ python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model　# to
 ```
 onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.tok.txt" -output "pred.txt"  -verbose  
 ```
+
 
 
 ## 評価
@@ -163,6 +180,7 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.
 python detok-spm.py "pred.txt"　# detokenizeして"pred.detok.txt"作成  
 python bleu.py before_test_tgt.txt pred.detok.txt　# 事前訓練時の評価  
 ```
+ここで評価が高かったモデルを再訓練時に指定する。
 
 <再訓練時の評価>  
 ```
@@ -170,6 +188,8 @@ python detok-spm.py "after.tgt.test.tok.txt"　# detokenizeして"after.tgt.test
 python detok-spm.py "pred.txt"　# detokenizeして"pred.detok.txt"作成  
 python bleu.py after.tgt.test.tok.detok.txt pred.detok.txt　# 再訓練時の評価  
 ```
+ここで評価が高かったモデルをAlexaと接続する。
+
 
 
 ## Alexaと接続・対話
