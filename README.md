@@ -30,10 +30,10 @@ TwitterAPIの取得の方法は「Pythonでつくる対話システム」とい�
 ※2023/02/09以降TwitterAPIが有料化される模様  
 
 それぞれ、以下の通りに実行する。
-'''
+```
 python collect_data.py
 python Twitter_API.py
-'''
+```
 
 
 
@@ -58,9 +58,9 @@ SentencePieceは与えられた学習データ（テキスト）から教師な�
 ①のファイルと②のモデルは対話A班からもらったものなので、②の作成方法はA班のものを見てもらいたい。  
 
 ファイルは以下の通りにして生成する。
-'''
+```
 bash before_split.sh
-'''
+```
 
 
 
@@ -72,9 +72,9 @@ bash before_split.sh
 
 以下のように絵文字・顔文字除去したいファイル名を指定して実行することで絵文字・顔文字を除去したファイルが生成される。
 
-'''
+```
 python3 tweet_preprocess.py [ファイル名]
-'''
+```
 
 生成されるファイル名は指定したファイル名の".txt"を"_removed.txt"に置き換えたものになる。
 
@@ -96,9 +96,9 @@ python3 tweet_preprocess.py [ファイル名]
 単語分割は「前処理<タグなしデータ＞」と同様にSentencePieceを用いている。  
 
 ファイルは以下の通りにして生成する。  
-'''
+```
 bash after_split.sh
-'''
+```
 
 
 ## 訓練
@@ -108,18 +108,18 @@ bash after_split.sh
 
 事前訓練は以下のように行っている。  
 ここではタグなしデータ2000000件使用している。
-'''
+```
 onmt_build_vocab -config "before_transformer.yaml" -n_sample 2000000  
 onmt_train -config "before_transformer.yaml"
-'''
+```
 
 再訓練は以下のように行っている。  
 ここではタグありデータ150000件使用している。  
 今回は事前訓練を350000ステップ時のモデルから再開して再訓練している。  
-'''
+```
 onmt_build_vocab -config "after_transformer.yaml" -n_sample 150000 -skip_empty_level silent -overwrite  
 onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_vocab -reset_optim states -train_from "before_transformer_step_350000.pt"  
-'''
+```
 
 
 ## 応答生成
@@ -131,16 +131,16 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 ①では応答生成を行うため、前処理時同様入力文を単語分割している。
 "before_test_src.txt"は去年の先輩が使用していた100件のタグなしの発話データである。
 
-'''
+```
 python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model　# tokenizeして"before_text_src.tok.txt"作成
-'''
+```
 
 今回は事前訓練時の500000ステップ時のモデルの評価を行っている。  
 -src ではtokenizeしたテストデータを入力している。  
 -output は翻訳結果を出力するファイル名である。  
-'''
+```
 onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.tok.txt" -output "pred.txt"  -verbose  
-'''
+```
 
 
 ## 評価
@@ -160,17 +160,17 @@ onmt_translate -model "before_transformer_step_500000.pt" -src "before_test_src.
 
 評価は以下のように行っている。  
 <事前訓練時の評価>  
-'''
+```
 python detok-spm.py "pred.txt"　# detokenizeして"pred.detok.txt"作成  
 python bleu.py before_test_tgt.txt pred.detok.txt　# 事前訓練時の評価  
-'''
+```
 
 <再訓練時の評価>  
-'''
+```
 python detok-spm.py "after.tgt.test.tok.txt"　# detokenizeして"after.tgt.test.tok.detok.txt"作成  
 python detok-spm.py "pred.txt"　# detokenizeして"pred.detok.txt"作成  
 python bleu.py after.tgt.test.tok.detok.txt pred.detok.txt　# 再訓練時の評価  
-'''
+```
 
 
 ## Alexaと接続・対話
@@ -187,9 +187,9 @@ https://github.com/nagaratokuma/PBL_Alexa_.git
 ここでは、470000ステップ時のモデルを使用して接続を行っている。  
 
 実行は以下のように変更して行う。
-'''
+```
 alexa_bot.py -model after_transformer_step_10000.pt -replace_unk -src None  
-'''
+```
 
 なお、-modelで指定しているが、結局モデルは②の中で指定をしているので、ここでモデルを指定しても意味がない。  
 しかし、ここで-modelを指定しないorないモデルをしていするとおそらくエラーが出ると思われる。
