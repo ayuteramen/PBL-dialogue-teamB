@@ -19,7 +19,7 @@ https://github.com/hirokiyamauch/PBL_dialog
 ## データ収集
 ここでは次のファイルを使用している。  
 ・① collect_data.py  
-・② Twitter_API (1).ipynb  
+・② collect_tag_data.py
 
 ①ではタグなしでとっており、②は年代・性別のタグをつけて収集をしている。  
 これらのデータは後の事前訓練、再訓練でそれぞれ使用する。  
@@ -28,11 +28,11 @@ https://github.com/hirokiyamauch/PBL_dialog
 TwitterAPIの取得の方法は「Pythonでつくる対話システム」という本の3.4章に記載がされてあった。  
 ネットで調べても出てくると思われる。  
 ※2023/02/09以降TwitterAPIが有料化される模様  
-
+ 
 それぞれ、以下の通りに実行する。
 ```
 python collect_data.py
-python Twitter_API.py
+python collect_tag_data.py
 ```
 
 
@@ -52,6 +52,8 @@ python Twitter_API.py
 
 "pre_data_not_delate_10count.txt"は「データ収集」の①のファイルを使用して対話A班と共同で集め、A班に前処理を行ってもらったタグなしデータ2144910件のデータである。  
 その時の前処理のファイルはA班の方を見に行ってもらいたい。  
+https://github.com/miyatarina/PBL-dialogue-teamA  
+
 
 単語分割はSentencePieceを用いている。  
 SentencePieceは与えられた学習データ（テキスト）から教師なし学習で文字列に分割するためのモデルを生成する。  
@@ -70,13 +72,11 @@ bash before_split.sh
 絵文字・顔文字の除去は次のファイルを使用している。  
 ・tweet_preprocess.py
 
-以下のように絵文字・顔文字除去したいファイル名を指定して実行することで絵文字・顔文字を除去したファイルが生成される。
-
+以下のように絵文字・顔文字除去したいファイル名を指定して実行することで絵文字・顔文字を除去したファイルが生成される。  
+生成されるファイル名は指定したファイル名の".txt"を"_removed.txt"に置き換えたものになる。  
 ```
 python3 tweet_preprocess.py [ファイル名]
 ```
-
-生成されるファイル名は指定したファイル名の".txt"を"_removed.txt"に置き換えたものになる。
 
 ここでは次のファイルを使用している。  
 ・① apply-spm.py  
@@ -130,7 +130,6 @@ onmt_train -config "after_transformer.yaml" -skip_empty_level silent -update_voc
 
 ①では応答生成を行うため、前処理時同様入力文を単語分割している。
 "before_test_src.txt"は去年の先輩が使用していた100件のタグなしの発話データである。
-
 ```
 python apply-spm.py before_test_src.txt pre_data_not_delate_10count.model　# tokenizeして"before_text_src.tok.txt"作成
 ```
@@ -176,6 +175,9 @@ python bleu.py after.tgt.test.tok.detok.txt pred.detok.txt　# 再訓練時の�
 ## Alexaと接続・対話
 Alexaとの接続方法は以下のページに記載してある。  
 https://github.com/nagaratokuma/PBL_Alexa_.git  
+
+ここでは、「データ収集」時に登場した「Pythonでつくる対話システム」に出てきた以下のページをベースとしている。
+https://github.com/dsbook/dsbook 
 
 なお、上のページから次の2ファイルを変更している。  
 ・①alexa_bot.py  
